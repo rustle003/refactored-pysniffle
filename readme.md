@@ -1,0 +1,2 @@
+### refactored-pysniffle
+This is a "translation" from [refactored-sniffle](https://github.com/rustle003/refactored-sniffle), written in Scala 2.12, to Python 3.9.x. The "translation" will try to capture the structure defined in Scala although there may be more straightforward ways of accomplishing the tasks in python.
