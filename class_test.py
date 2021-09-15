@@ -22,7 +22,8 @@ class A:
         self.new_attr: int = new_attr
 
 class C(A):
-    def __init__(self: 'C') -> None: pass
+    def __init__(self: 'C') -> None:
+        self.inst_attrc = 20
     
     def apply(self: 'C', inst_attrc: int) -> Callable[[int],None]:
         self.inst_attrc = inst_attrc
@@ -32,5 +33,6 @@ class C(A):
         print(f"{self.inst_attrc} belongs to C; {self.inst_attr} belongs to A")
 
 my_c = C()
-my_c.apply(53)(44)
-my_c.print_attributeC()
+# my_c.apply(53)(44)
+my_c.call_from_class_b(4)
+print(my_c.new_attr)
