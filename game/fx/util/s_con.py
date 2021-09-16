@@ -11,9 +11,9 @@ class _SCon:
     up      : str = 'A'
 
     
-    def caretTo(self, x: int, y: int) -> None: print(self.eb + y + ";" + x + "H", end = "")
-    def caretSave(self)               -> None: print(self.eb + "s", end = "")
-    def caretRestore(self)            -> None: print(self.eb + "u", end = "")
-    def delLine(self)                 -> None: print(self.eb + 2 + "K", end ="")
+    def caret_to(self, x: int, y: int) -> None: print(self.eb + y + ";" + x + "H", end = "")
+    def caret_save(self)               -> None: print(self.eb + "s", end = "")
+    def caret_restore(self)            -> None: print(self.eb + "u", end = "")
+    def del_line(self)                 -> None: print(self.eb + 2 + "K", end ="")
 
-SCon: _SCon = _SCon()
+SCON: _SCon = _SCon()
