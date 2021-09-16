@@ -1,3 +1,5 @@
+from game.util.editable import Editable
+from game.util.immutable import Immutable
 from typing import Generic
 
 from game.util.assignment_limitation import AssignmentLimitation,T
@@ -20,7 +22,7 @@ class _SudokuCell(SudokuCell):
         SudokuCell.__init__(self,val)
 
     def apply(self: '_SudokuCell', value: T, b: bool = False) -> SudokuCell:
-        if(b):
+        if(not b):
             return self.EditableSudokuCell(value)
         else:
             return self.ImmutableSudokuCell(value)
@@ -37,5 +39,7 @@ def main() -> int:
     test.assign(3)
 
     print(test.value())
+
+    print(isinstance(test, Editable))
 
     return 0
