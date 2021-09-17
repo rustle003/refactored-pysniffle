@@ -59,7 +59,6 @@ class _SudokuScreen_(SudokuScreen):
         {pxy()}{f}{B}|{o}           {f}{B}|{o}           {f}{B}|{o}           {f}{B}|{o}
         {pxy()}{f}{B}|{o}           {f}{B}|{o}           {f}{B}|{o}           {f}{B}|{o}    -> Press {self.g}s{o} to submit your sudoku
         {pxy()}{f}{B}|{o}           {f}{B}|{o}           {f}{B}|{o}           {f}{B}|{o}
-        {pxy()}{f}{B}|{o}           {f}{B}|{o}           {f}{B}|{o}           {f}{B}|{o}
         {pxy()}{f}{B}|-----------o-----------o-----------|{o}
         {pxy()}{f}{B}|{o}           {f}{B}|{o}           {f}{B}|{o}           {f}{B}|{o}    -> Press {self.r}q{o} to quit
         {pxy()}{f}{B}|{o}           {f}{B}|{o}           {f}{B}|{o}           {f}{B}|{o}
@@ -91,11 +90,11 @@ class _SudokuScreen_(SudokuScreen):
 
         return \
         f"""
-        {O}{G}{m}  ____            _       _                                                                {o}
-        {O}{C}{b} / ___| _   _  __| | ___ | | ___   _                                                       {o}
-        {O}{R}{c} \\___ \\| | | |/ _` |/ _ \\| |/ / | | |                                                      {o}
-        {O}{W}{r}  ___) | |_| | (_| | (_) |   <| |_| |                                                      {o}
-        {O}{M}{w} |____/ \\__,_|\\__,_|\\___/|_|\\_\\\\__,_|                                                      {o}
+        {G}{m}  ____            _       _                                                                {o}
+        {C}{b} / ___| _   _  __| | ___ | | ___   _                                                       {o}
+        {R}{c} \\___ \\| | | |/ _` |/ _ \\| |/ / | | |                                                      {o}
+        {W}{r}  ___) | |_| | (_| | (_) |   <| |_| |                                                      {o}
+        {M}{w} |____/ \\__,_|\\__,_|\\___/|_|\\_\\\\__,_|                                                      {o}
         {o}
         """
 
@@ -111,16 +110,16 @@ class _SudokuScreen_(SudokuScreen):
         print(f"{fmt}{a}", end = "")
     
     def print_at_caret_position(self: '_SudokuScreen_',ss: SudokuScreen, a: Any, fmt: str = "") -> None:
-        (tx, ty) = self.coordinate_transform(ss.caret_to_pos).unapply()
+        (tx, ty) = self.coordinate_transform(ss.caret).unapply()
         SCON.caret_to(tx,ty)
         print(f"{fmt}{a}", end = "")
     
     def safe_print(self: '_SudokuScreen_',message: str, fmt: str = "") -> None:
         (i,j) = self.safe_print_pos.unapply()
         SCON.caret_to(i, j)
-        print(f"{fmt}{message}");         sleep(1.5)
-        self.reset_console_formatting
-        SCON.caretTo(i,j)
+        print(f"{fmt}{message}");               sleep(2.5)
+        self.reset_console_formatting()
+        SCON.caret_to(i,j)
         SCON.del_line()
 
     def safe_input(self: '_SudokuScreen_', message: str, fmt: str = "") -> str:
@@ -172,23 +171,23 @@ class SudokuScreen:
     def initial_fill(self: 'SudokuScreen') -> None:
         for r in range(SUDOKU_BOARD.board_h):
             for c in range(SUDOKU_BOARD.board_w):
-                if self.sBoard(r)(c) != SUDOKU_CELL.EMPTY:
-                    SUDOKU_SCREEN.print_to_screen(                      \
+                if self.sBoard.apply(r)(c) != SUDOKU_CELL.EMPTY:
+                    SUDOKU_SCREEN.print_to_screen((                     \
                         SUDOKU_SCREEN.coordinate_transform(Pos(r,c)),   \
-                        self.sBoard(r)(c),                              \
-                        SUDOKU_SCREEN.r                                 \
-                    )
+                        self.sBoard.apply(r)(c)),                       \
+                        SUDOKU_SCREEN.r)
+
         for r in range(SUDOKU_BOARD.board_h):
             for c in range(SUDOKU_BOARD.board_w):
                 if self.sBoard.apply(r)(c) == SUDOKU_CELL.EMPTY:
-                    SUDOKU_SCREEN.print_to_screen(                      \
-                        SUDOKU_SCREEN.coordinate_transform((            \
-                        Pos(r,c),                                       \
+                    SUDOKU_SCREEN.print_to_screen((                     \
+                        SUDOKU_SCREEN.coordinate_transform(             \
+                        Pos(r,c)),                                      \
                         SUDOKU_BOARD.empty_rep),                        \
-                        SUDOKU_SCREEN.w))
+                        SUDOKU_SCREEN.w)
 
     def insert_val(self: 'SudokuScreen', a: Any) -> Outcome:
-        return self.sBoard.insert(int(a.__str__), self.caret)
+        return self.sBoard.insert(int(a.__str__()), self.caret)
     
     def call_sudoku_board(self: 'SudokuScreen') -> IfSB:
         return self.sBoard

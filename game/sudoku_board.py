@@ -108,12 +108,12 @@ class _SudokuBoard(IfSB):
             return val not in map(lambda pos: sb.apply(pos.x)(pos.y), poss)
         
         def check_all(sb: IfSB) -> bool:
-            return _SudokuBoard.BoardChecker.is_filled_completely(sb) and            \
-                False not in (_SudokuBoard.BoardChecker.is_unique_sequence(sb,pos)   \
+            return _SudokuBoard.BoardChecker.is_filled_completely(sb, _SudokuBoard.FullBoard.apply()) and   \
+                False not in (_SudokuBoard.BoardChecker.is_unique_sequence(sb,pos)                          \
                 for pos in _SudokuBoard.FullBoard.all_positions)
         
         def is_filled_completely(sb: IfSB, sq: list[Pos]) -> bool:
-            SUDOKU_CELL.EMPTY not in (sb.get_cell(pos).value() for pos in sq)
+            return SUDOKU_CELL.EMPTY not in (sb.get_cell(pos).value() for pos in sq)
         
         def is_unique_sequence(sb: IfSB, sq: list[Pos]) -> bool:
             if len(sq) < 2:
@@ -164,7 +164,7 @@ class _SudokuBoard(IfSB):
             row_transform: Callable[[int],int] = _SudokuBoard.Square.transform(pos.x)
             col_transform: Callable[[int],int] = _SudokuBoard.Square.transform(pos.y)
 
-            return reduce(lambda l1,l2: l1.extend(l2) if l1 != None else l2,\
+            return reduce(lambda l1,l2: l1 + l2,                            \
                     [[Pos(row_transform(r),col_transform(c))                \
                     for c in range(_SudokuBoard.Square.square_dim())]       \
                     for r in range(_SudokuBoard.Square.square_dim())])
@@ -190,7 +190,7 @@ class _SudokuBoard(IfSB):
             COLUMN: _SudokuBoard.SudokuBoardVirtualPartition = _SudokuBoard.Column
             SQUARE: _SudokuBoard.SudokuBoardVirtualPartition = _SudokuBoard.Square
 
-            return [[part.apply(idx) for part in [ROW,COLUMN,SQUARE]]\
+            return [reduce(lambda l1,l2: l1 if l2 == None else l1 + l2, [part.apply(idx) for part in [ROW,COLUMN,SQUARE]])      \
                     for idx in range(_SudokuBoard.FullBoard.square_dim())]
         
         def contains_all() -> list[Pos]:
